@@ -1,0 +1,20 @@
+name: CiCd-pipeline
+run-name: ${{ github.actor }} тестируется с помощью Действий Гитхаб
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Проверка кода
+      uses: actions/checkout@v2
+    - name: Размещение на VPS
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        script: |
+          cd /var/www/html
+          git pull origin main
+          sudo systemctl restart nginx
